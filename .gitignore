@@ -1,0 +1,19 @@
+# Ignore Python cache
+__pycache__/
+*.py[cod]
+
+# Ignore node modules
+node_modules/
+
+# Ignore environment files
+.env
+
+# Ignore OS files
+.DS_Store
+Thumbs.db
+
+# Ignore log files
+*.log
+
+# Ignore VS Code settings
+.vscode/
