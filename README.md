@@ -10,7 +10,7 @@ It separates business logic from real-time voice infrastructure while offering d
 
 ## Service Architecture
 
-### 1. High-Level Overview
+### High-Level Overview
 The Lineblocs service architecture is logically divided into two primary deployment groups, each managed by separate Helm charts:
 
 - **Web Helm Chart**: user-facing portals, APIs, and administrative tools  
@@ -27,7 +27,7 @@ This separation of concerns allows the **real-time communication systems (VoIP)*
 
 ---
 
-### 2. Web Helm Chart Components
+### Web Helm Chart Components
 
 - **User Portal (JS App)**  
 	SPA for customers to manage accounts, call history, billing, and settings.  
@@ -58,7 +58,7 @@ This separation of concerns allows the **real-time communication systems (VoIP)*
 
 ---
 
-### 3. VoIP Helm Chart Components
+### VoIP Helm Chart Components
 
 - **OpenSIPS Proxy**  
 	High-performance SIP proxy for registrations, INVITEs, and message routing.  
@@ -82,7 +82,7 @@ This separation of concerns allows the **real-time communication systems (VoIP)*
 
 ---
 
-### 4. Architecture Diagram
+### Architecture Diagram
 
 ```mermaid
 graph LR
