@@ -118,3 +118,23 @@ graph LR
 	CDN --> A
 	CDN --> B
 ```
+
+---
+
+## Quickstart
+
+Deploy the full Lineblocs stack (Web + VoIP) on Kubernetes using Helm:
+
+```bash
+# Add Lineblocs Helm repository
+helm repo add lineblocs https://helm.lineblocs.com/
+
+# Update repo
+helm repo update
+
+# Install Lineblocs stack (Web + VoIP)
+helm install lineblocs lineblocs/lineblocs \
+	--namespace lineblocs-system \
+	--create-namespace \
+	-f values.yaml
+```
