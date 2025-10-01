@@ -10,18 +10,17 @@ It separates business logic from real-time voice infrastructure while offering d
 
 ## Service Architecture
 
-### High-Level Overview
-The Lineblocs service architecture is logically divided into two primary deployment groups, each managed by separate Helm charts:
+The Lineblocs service architecture is divided into two primary deployment groups, each managed by separate Helm charts:
 
-- **Web Helm Chart**: user-facing portals, APIs, and administrative tools  
+- **Web Helm Chart**: User-facing portals, APIs, and administrative tools  
 - **VoIP Helm Chart**: SIP signaling, media servers, and call control  
 
 These groups are tightly coupled through shared infrastructure:
 
 - **Shared Database** → single source of truth for accounts, call records, billing, and routing rules  
 - **Two distinct APIs** →  
-	- **User API**: user/admin-facing business logic  
-	- **Internals API**: low-latency, real-time API for VoIP services  
+	- **User API**: User or admin-facing business logic  
+	- **Internals API**: Low-latency, real-time API for VoIP services  
 
 This separation of concerns allows the **real-time communication systems (VoIP)** to operate independently from the **user-facing web applications** and management tools.
 
