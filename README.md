@@ -1,10 +1,3 @@
-
----
-
-## Documentation
-
-For complete tutorials, deployment guides, and resources, visit:
-https://lineblocs.com/resources
 # Lineblocs
 
 [![Build Status](https://img.shields.io/badge/build-passing-brightgreen)]()
@@ -156,3 +149,7 @@ helm install lineblocs lineblocs/lineblocs \
 | Web-only          | Host user/admin logic; use Lineblocs cloud for telephony |
 | VoIP-only         | Use your own SIP/media stack; manage via Lineblocs cloud |
 | Hybrid            | Combine cloud and self-hosted components            |
+
+## Documentation
+
+For complete tutorials, deployment guides, and resources, visit: https://lineblocs.com/resources
