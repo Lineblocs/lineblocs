@@ -74,7 +74,7 @@ docker-compose up --build
 
 ---
 
-## Cloud Deployment
+### Cloud Deployment
 
 Lineblocs supports multiple deployment models so organizations can choose what best fits their operational and compliance needs:
 
@@ -91,7 +91,7 @@ For cloud deployment patterns, capacity planning, and recommended architecture f
 
 ---
 
-## Hosted Sandbox (No Setup Required)
+### Hosted Sandbox (No Setup Required)
 
 If you want to evaluate Lineblocs without installing anything, check the official resources page for sandbox or demo access (availability may vary):  
 👉 [https://lineblocs.com/resources](https://lineblocs.com/resources)
@@ -270,6 +270,8 @@ MAJOR.MINOR.PATCH
 - MAJOR for incompatible API changes  
 - MINOR for new, backwards-compatible features  
 - PATCH for bug fixes and small improvements  
+
+Check the [CHANGELOG.md](./CHANGELOG.md) file for details.
 
 ---
 
