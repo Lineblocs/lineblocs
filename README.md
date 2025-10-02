@@ -16,7 +16,9 @@
 
 ---
 
-## 📁 Table of Contents
+
+<details>
+<summary><strong>📁 Table of Contents</strong></summary>
 
 - [What Can I Do with Lineblocs?](#what-can-i-do-with-lineblocs)  
 - [Quickstart (Local Setup)](#quickstart-local-setup)  
@@ -30,6 +32,8 @@
 - [Versioning](#versioning)  
 - [License](#license)  
 - [Team Behind Lineblocs](#team-behind-lineblocs)
+
+</details>
 
 ---
 
