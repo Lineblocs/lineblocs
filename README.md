@@ -1,154 +1,321 @@
 # Lineblocs
 
-[![Build Status](https://img.shields.io/badge/build-passing-brightgreen)]()
-[![License](https://img.shields.io/badge/license-MIT-blue)]()
+<p align="center">
+  <img src="https://lineblocs.com/assets/logo.png" alt="Lineblocs Logo" width="280"/>
+</p>
 
-Lineblocs is a modular, open communications platform designed for telecom operators, UCaaS providers, and enterprises who want to build white-label Voice, WebRTC, and messaging services.  
-It separates business logic from real-time voice infrastructure while offering developer-centric APIs, SDKs, and flexible deployment options.
+<p align="center">
+  <strong>Open-source cloud communications platform for building, hosting, and scaling modern VoIP solutions.</strong>
+</p>
 
----
-
-## Service Architecture
-
-The Lineblocs service architecture is divided into two primary deployment groups, each managed by separate Helm charts:
-
-- **Web Helm Chart**: User-facing portals, APIs, and administrative tools  
-- **VoIP Helm Chart**: SIP signaling, media servers, and call control  
-
-These groups are tightly coupled through shared infrastructure:
-
-- **Shared Database** → single source of truth for accounts, call records, billing, and routing rules  
-- **Two distinct APIs** →  
-	- **User API**: User or admin-facing business logic  
-	- **Internals API**: Low-latency, real-time API for VoIP services  
-
-This separation of concerns allows the **real-time communication systems (VoIP)** to operate independently from the **user-facing web applications** and management tools.
+<p align="center">
+  <a href="https://lineblocs.com/resources">Documentation</a> •
+  <a href="https://lineblocs.com">Website</a> •
+  <a href="https://github.com/lineblocs">GitHub</a>
+</p>
 
 ---
 
-### Web Helm Chart Components
+## 📁 Table of Contents
 
-- **User Portal (JS App)**  
-	SPA for customers to manage accounts, call history, billing, and settings.  
-	Assets are served via **CDN** and all dynamic data is retrieved from the **User API**.  
-
-- **Flow Editor (JS App)**  
-	Drag-and-drop visual editor for creating and managing call flows.  
-	Served via **CDN** and integrates with **User API** for saving and validation.  
-
-- **Laravel Admin Panel**  
-	Comprehensive backend portal for administrators to manage users, carriers, VoIP servers, billing, and system analytics.  
-	Directly interacts with the **Shared Database** for configuration and data.  
-
-- **User API**  
-	Public-facing API gateway handling user and admin actions.  
-	Supports authentication, account CRUD, call flow management, and CDR retrieval.  
-
-- **Internals API**  
-	Private, high-throughput API for machine-to-machine communication.  
-	Handles call authorization, routing instructions, and billing events.  
-	Consumed by **OpenSIPS Proxy**, **Asterisk Backend**, and **VoIP Workers**.  
-
-- **Shared Database**  
-	Central datastore holding users, routing rules, call flows, billing data, and system settings.  
-
-- **CDN / Static Assets**  
-	Delivers compiled JS/CSS/HTML for global low-latency access.  
+- [What Can I Do with Lineblocs?](#what-can-i-do-with-lineblocs)  
+- [Quickstart (Local Setup)](#quickstart-local-setup)  
+- [Cloud Deployment](#cloud-deployment)  
+- [Hosted Sandbox (No Setup Required)](#hosted-sandbox-no-setup-required)  
+- [Why Lineblocs?](#why-lineblocs)  
+- [Architectural Overview](#architectural-overview)  
+- [Our Vision](#our-vision)  
+- [Community & Contributions](#community--contributions)  
+- [Feature Requests & Bugs](#feature-requests--bugs)  
+- [Versioning](#versioning)  
+- [License](#license)  
+- [Team Behind Lineblocs](#team-behind-lineblocs)
 
 ---
 
-### VoIP Helm Chart Components
+## What Can I Do with Lineblocs?
 
-- **OpenSIPS Proxy**  
-	High-performance SIP proxy for registrations, INVITEs, and message routing.  
-	First point of contact for SIP endpoints; queries **Internals API** for authentication and routing.  
+Lineblocs provides the core building blocks for modern telephony and real-time communications:
 
-- **Asterisk Backend (ARI Client)**  
-	Handles in-call control logic.  
-	Connects to Asterisk Media Server via ARI WebSocket and triggers **Internals API** for billing and event processing.  
-
-- **Asterisk Media Server**  
-	Media engine (IVRs, conferencing, call recording) operating as a B2BUA.  
-	Receives SIP from OpenSIPS and executes commands from the Asterisk Backend.  
-
-- **RTP Proxy Pool**  
-	Cluster of media relay servers that handle RTP streams between endpoints and media servers.  
-	Managed by the **OpenSIPS Proxy**.  
-
-- **VoIP Workers / Billing Enrichers**  
-	Asynchronous background tasks: billing enrichment, rate lookups, invoicing, and cleanup.  
-	Poll the **Shared Database** and communicate with **Internals API** when needed.  
+- **Design and run programmable telephony** (SIP, WebRTC, RTP) with a visual Flow Editor.  
+- **Manage customers, tenants and billing** through user and admin portals.  
+- **Host voice features**: IVR, call recording, conferencing, bridging, number handling.  
+- **Integrate voice into apps** using REST APIs and webhooks.  
+- **Process billing & CDR pipelines** and generate invoices or usage reports.  
+- **Operate at carrier scale** using SIP proxies and RTP proxy pools (architected for scale).  
 
 ---
 
-### Architecture Diagram
+## Quickstart (Local Setup)
 
-```mermaid
-graph LR
-	subgraph Web Helm
-		A[User Portal]
-		B[Flow Editor]
-		C[Laravel Admin Panel]
-		D[User API]
-		E[Internals API]
-		DB[(Shared Database)]
-		CDN[CDN / Static Assets]
-	end
-
-	subgraph VoIP Helm
-		F[OpenSIPS Proxy]
-		G[Asterisk Backend]
-		H[Asterisk Media Server]
-		I[RTP Proxy Pool]
-		J[VoIP Workers]
-	end
-
-	A --> D
-	B --> D
-	C --> DB
-	D --> DB
-	E --> DB
-	F --> E
-	G --> E
-	J --> DB
-	F --> H
-	G --> H
-	H --> I
-	CDN --> A
-	CDN --> B
-```
-
----
-
-## Quickstart
-
-Deploy the full Lineblocs stack (Web + VoIP) on Kubernetes using Helm:
+> This local quickstart is intended for evaluation and development. For production and cloud deployments, see the Cloud Deployment section and official docs.
 
 ```bash
-# Add Lineblocs Helm repository
-helm repo add lineblocs https://helm.lineblocs.com/
+# Clone the main Lineblocs repository (public repo)
+git clone https://github.com/lineblocs/lineblocs.git
+cd lineblocs
 
-# Update repo
-helm repo update
+# Bring up a local development environment (Docker Compose)
+docker-compose up --build
+```
 
-# Install Lineblocs stack (Web + VoIP)
-helm install lineblocs lineblocs/lineblocs \
-	--namespace lineblocs-system \
-	--create-namespace \
-	-f values.yaml
+* Once services start, the local ports typically map to:
+
+  * **User Portal**: `http://localhost:3000`
+  * **Admin Panel**: `http://localhost:8080/admin`
+  * **APIs**: `http://localhost:8000`
+  * **SIP** for testing (softphone): `sip:localhost`
+
+> If you do not see these endpoints, consult the `docker-compose.yml` file in the repository for exact port mappings and the `README` in that repo for environment variables.
+
+---
+
+## Cloud Deployment
+
+Lineblocs supports multiple deployment models so organizations can choose what best fits their operational and compliance needs:
+
+* **Self-hosted (Full Web + VoIP)** — host the complete stack in your own cloud or private data center.  
+* **Web-only** — run the user/admin stack while leveraging hosted telephony services.  
+* **VoIP-only** — run telephony infra and use hosted portals or integrate with other admin systems.  
+* **Hybrid** — combine cloud-hosted components with self-hosted media or control-plane pieces to meet data residency, latency, or regulatory requirements.  
+
+For cloud deployment patterns, capacity planning, and recommended architecture for production, consult the official deployment resources:  
+👉 [https://lineblocs.com/resources](https://lineblocs.com/resources)
+
+> Note: This README focuses on **service design and architecture** rather than specific orchestration instructions. See the docs above for Helm/Kubernetes manifests and platform-specific deployment guides.
+
+---
+
+## Hosted Sandbox (No Setup Required)
+
+If you want to evaluate Lineblocs without installing anything, check the official resources page for sandbox or demo access (availability may vary):  
+👉 [https://lineblocs.com/resources](https://lineblocs.com/resources)
+
+---
+
+## Why Lineblocs?
+
+Telecommunications is transitioning from closed, inflexible systems to programmable, cloud-native platforms — and yet many organizations are still forced to adopt vendor-locked PBX/CPaaS solutions that are costly and hard to customize. Lineblocs is built to address the core pain points enterprises and providers face:
+
+### 1) Open and Extensible
+Lineblocs is an **open-source platform**. You have full visibility and control over the stack — from SIP routing to billing pipelines — enabling customization and extension without vendor constraints.
+
+### 2) End-to-end Communications Platform
+Rather than stitching together disparate tools, Lineblocs provides an integrated toolkit:
+- User and admin portals for operations  
+- Visual call-flow orchestration  
+- SIP/WebRTC signaling and media processing  
+- Billing / CDR pipelines and integrations  
+- Developer-friendly APIs and webhooks  
+
+This integration reduces operational friction and shortens time-to-market for communications features.
+
+### 3) Real-time Decisioning with Internals API
+A core differentiator is the **Internals API** — a low-latency, high-throughput service used by SIP proxies and media backends to make real-time routing, permission, and billing decisions. It allows sophisticated call flows and accurate usage accounting with minimal latency impact.
+
+### 4) Architected for Scale
+Lineblocs applies proven telecom patterns:
+- SIP proxies (OpenSIPS) for registration and routing at scale  
+- RTP proxy pools to offload media relay and reduce media server load  
+- Media engines (Asterisk) for B2BUA tasks like IVR, conferencing, and recording  
+
+These enable predictable scaling from pilot to carrier-grade deployments.
+
+### 5) Programmability and Developer Productivity
+Lineblocs is designed for developers:
+- **Flow Editor** for visually composing call logic  
+- **REST APIs** for programmatic control and integrations  
+- **Webhooks** for event-driven workflows and CRM/ERP connectivity  
+
+You can build advanced voice features quickly using tools developers already understand.
+
+### 6) Deployment Flexibility & Data Control
+Lineblocs supports self-hosted and hybrid models — useful when data residency, compliance, or latency requirements prohibit using hosted-only solutions. You retain full control over data, routing policies, and vendor selection for carriers/trunks.
+
+---
+
+### Old Telecom vs Lineblocs — Visual Comparison
+
+```mermaid
+flowchart LR
+  style A fill:#fde68a,stroke:#f59e0b,stroke-width:2px
+  style B fill:#dbeafe,stroke:#2563eb,stroke-width:2px
+
+  subgraph Legacy["Legacy (On-Prem / Vendor-Locked)"]
+    A[PBX / Proprietary] 
+    V[Vendor Customization]
+    COST[High OpEx & License Cost]
+  end
+
+  subgraph Modern["Lineblocs (Open & Programmable)"]
+    B1[Open-source Stack]
+    B2[Visual Call Flows]
+    B3[Developer APIs]
+    B4[Hybrid Deployment]
+  end
+
+  A -->|pain: slow, costly| B1
+  V -->|pain: locked| B2
+  COST -->|pain: expensive| B3
+  click B1 "https://lineblocs.com/resources" "More on Lineblocs"
 ```
 
 ---
 
-## Deployment Modes
+## Architectural Overview
 
-| Mode              | Description                                         |
-|-------------------|-----------------------------------------------------|
-| Full (Web + VoIP) | Self-hosted complete stack in Kubernetes            |
-| Web-only          | Host user/admin logic; use Lineblocs cloud for telephony |
-| VoIP-only         | Use your own SIP/media stack; manage via Lineblocs cloud |
-| Hybrid            | Combine cloud and self-hosted components            |
+Below is a detailed service-level design for Lineblocs. This is intentionally **platform-focused**, describing components and how they interact at runtime.
 
-## Documentation
+### High-level Service View
 
-For complete tutorials, deployment guides, and resources, visit: https://lineblocs.com/resources
+```mermaid
+flowchart TB
+  subgraph Web["🌐 Web Helm Chart (User/API layer)"]
+    UP["👤 User Portal (SPA)"]
+    FE["🛠 Flow Editor (SPA)"]
+    AP["📊 Laravel Admin Panel"]
+    UAPI["🛰 User API (public)"]
+    IAPI["⚡ Internals API (private)"]
+  end
+
+  subgraph Infra["Shared Infrastructure"]
+    DB["🗄 Shared Database (single source of truth)"]
+    OBJ["📦 Object Storage (recordings, media)"]
+    CDN["🌍 CDN (static assets)"]
+    CACHE["⚡ Cache / Session Store"]
+  end
+
+  subgraph VoIP["📞 VoIP Helm Chart (Realtime layer)"]
+    OS["📡 OpenSIPS Proxy (SIP front door)"]
+    AB["🔗 Asterisk Backend (ARI client)"]
+    AM["🎙 Asterisk Media Server (B2BUA)"]
+    RTP["🎛 RTP Proxy Pool"]
+    VW["🔁 VoIP Workers / Billing Enrichers"]
+  end
+
+  CDN --> UP
+  CDN --> FE
+
+  UP -->|HTTPS| UAPI
+  FE -->|HTTPS| UAPI
+  AP -->|DB reads/writes| DB
+
+  UAPI -->|CRUD| DB
+  IAPI -->|Real-time reads/writes| DB
+  IAPI -->|Records/media| OBJ
+  CACHE --> UAPI
+  CACHE --> IAPI
+
+  OS -->|Auth & routing requests| IAPI
+  OS -->|SIP| AM
+  OS -->|controls| RTP
+  AM -->|events (via ARI)| AB
+  AB -->|billing triggers| IAPI
+  VW -->|async jobs| DB
+  VW -->|rate lookups| IAPI
+```
+
+### Component Details (Service Design)
+
+#### Web Layer
+- **User Portal**: SPA providing account management, call history, billing, and self-service features. Uses the **User API** for dynamic operations.  
+- **Flow Editor**: Visual drag-and-drop designer used to author call flow graphs and publish executable routing rules. Saves flow configuration to the **Shared Database** via the User API.  
+- **Laravel Admin Panel**: Admin UI for managing tenants, carriers, SIP trunk credentials, billing rules, system health, and analytics. It typically reads/writes data directly to the shared datastore (subject to role-based access control).  
+- **User API**: Public-facing HTTP API that performs validation, auth (API keys / tokens), CRUD, and orchestrates non-real-time operations.  
+
+#### Internals API
+- **Purpose**: Private API (machine-to-machine) used by SIP and media components for **low-latency** lookups and writes.  
+- **Responsibilities**:  
+  * Validate call permissions and user/tenant balance  
+  * Compute routing (which trunk, which media cluster)  
+  * Emit and record billing events (start/stop)  
+  * Provide real-time feature flags and call flow decisions  
+- **Design goals**: minimal latency; high throughput; small response sizes; horizontal scaling.  
+
+#### VoIP Layer
+- **OpenSIPS Proxy**: Accepts REGISTER and INVITE messages, performs account lookup, enforces routing policies, and forwards signaling to media servers. For each incoming call, it queries the Internals API for authorization and final routing decisions. It also orchestrates RTP Proxy assignment for optimal media paths.  
+- **Asterisk Backend (ARI client)**: An application-layer service that listens to Asterisk events via ARI. On call events (answered, bridge, DTMF), it executes business logic — often by calling Internals API endpoints to start/stop billing timers or update CDRs.  
+- **Asterisk Media Server**: Acts as a B2BUA for scenarios that need media manipulation (IVR prompts, bridging, recording). Receives SIP from OpenSIPS and is controlled via ARI by the Asterisk Backend.  
+- **RTP Proxy Pool**: Stateless or semi-stateless media relays that handle RTP forwarding to avoid NAT/media issues and to distribute load.  
+- **VoIP Workers / Billing Enrichers**: Background workers that process raw CDRs, perform rate lookups, apply discounts/promotions, and generate invoices or settlements.  
+
+### Runtime Call Flow (Simplified)
+
+```mermaid
+sequenceDiagram
+  participant U as SIP Endpoint
+  participant OS as OpenSIPS
+  participant IA as Internals API
+  participant AM as Asterisk Media Server
+  participant AB as Asterisk Backend
+  participant DB as Shared Database
+
+  U->>OS: REGISTER
+  OS->>IA: Authenticate registration
+  IA->>DB: Verify account status
+  DB-->>IA: OK
+  IA-->>OS: Auth OK
+
+  U->>OS: INVITE (call)
+  OS->>IA: Authorize call, request routing
+  IA->>DB: Check balance, routing rules
+  DB-->>IA: Route found
+  IA-->>OS: Approved with route to AM
+  OS->>AM: Forward INVITE
+  AM->>AB: ARI event: answered
+  AB->>IA: Start billing timer
+  IA->>DB: Insert CDR (call start)
+```
+
+---
+
+## Our Vision
+
+We believe telecommunications should be **open, programmable, and accessible**. Lineblocs exists to:
+- Remove vendor lock-in and enable rapid telecom innovation.  
+- Make carrier-grade telephony available to product teams and developers.  
+- Provide a secure, extensible, and production-ready platform that integrates with modern cloud-native tooling.  
+
+---
+
+## Community & Contributions
+
+We welcome contributions from operators, developers, and system engineers.
+
+- Read our contribution guidelines: `CONTRIBUTING.md` (in-repo).  
+- Report issues: [https://github.com/lineblocs/lineblocs/issues](https://github.com/lineblocs/lineblocs/issues)  
+- For roadmap, integrations, or enterprise discussions, use the contact options on [https://lineblocs.com](https://lineblocs.com)  
+
+---
+
+## Feature Requests & Bugs
+
+- **Feature requests**: Open a “Feature Request” issue describing the use case, desired behaviour, and potential impact.  
+- **Bug reports**: Provide reproduction steps, environment details, and logs where possible.  
+- **Security issues**: Contact the Lineblocs team privately (see website for secure disclosure instructions).  
+
+---
+
+## Versioning
+
+Lineblocs follows semantic versioning:
+
+```
+MAJOR.MINOR.PATCH
+```
+
+- MAJOR for incompatible API changes  
+- MINOR for new, backwards-compatible features  
+- PATCH for bug fixes and small improvements  
+
+---
+
+## License
+
+Lineblocs is released under **AGPL-3.0**. See `LICENSE` for full terms.
+
+---
+
+## Team Behind Lineblocs
+
+Lineblocs is developed and maintained by the Lineblocs engineering team with contributions from the community. For partnership or enterprise enquiries, visit [https://lineblocs.com](https://lineblocs.com).
