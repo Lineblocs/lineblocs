@@ -166,27 +166,27 @@ flowchart LR
 
 ```mermaid
 flowchart TB
-  subgraph Web["🌐 Web Helm Chart (User/API layer)"]
-    UP["👤 User Portal (SPA)"]
-    FE["🛠 Flow Editor (SPA)"]
-    AP["📊 Laravel Admin Panel"]
-    UAPI["🛰 User API (public)"]
-    IAPI["⚡ Internals API (private)"]
+  subgraph Web["Web Helm Chart (User/API layer)"]
+    UP["User Portal (SPA)"]
+    FE["Flow Editor (SPA)"]
+    AP["Laravel Admin Panel"]
+    UAPI["User API (public)"]
+    IAPI["Internals API (private)"]
   end
 
   subgraph Infra["Shared Infrastructure"]
-    DB["🗄 Shared Database (single source of truth)"]
-    OBJ["📦 Object Storage (recordings, media)"]
-    CDN["🌍 CDN (static assets)"]
-    CACHE["⚡ Cache / Session Store"]
+    DB["Shared Database"]
+    OBJ["Object Storage"]
+    CDN["CDN"]
+    CACHE["Cache / Session Store"]
   end
 
-  subgraph VoIP["📞 VoIP Helm Chart (Realtime layer)"]
-    OS["📡 OpenSIPS Proxy (SIP front door)"]
-    AB["🔗 Asterisk Backend (ARI client)"]
-    AM["🎙 Asterisk Media Server (B2BUA)"]
-    RTP["🎛 RTP Proxy Pool"]
-    VW["🔁 VoIP Workers / Billing Enrichers"]
+  subgraph VoIP["VoIP Helm Chart (Realtime layer)"]
+    OS["OpenSIPS Proxy"]
+    AB["Asterisk Backend"]
+    AM["Asterisk Media Server"]
+    RTP["RTP Proxy Pool"]
+    VW["VoIP Workers / Billing Enrichers"]
   end
 
   CDN --> UP
@@ -205,7 +205,7 @@ flowchart TB
   OS -->|Auth & routing| IAPI
   OS -->|SIP| AM
   OS -->|controls| RTP
-  AM -->|events (via ARI)| AB
+  AM -->|events| AB
   AB -->|billing triggers| IAPI
   VW -->|async jobs| DB
   VW -->|rate lookups| IAPI
