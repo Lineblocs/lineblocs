@@ -167,7 +167,7 @@ flowchart LR
 
 Below is a detailed service-level design for Lineblocs. This is intentionally **platform-focused**, describing components and how they interact at runtime.
 
-![Lineblocs Architecture](docs/imgs/lineblocs_service_architecture.png)
+![Lineblocs Architecture](docs/imgs/lineblocs_architecture.png)
 
 ### Component Details (Service Design)
 
