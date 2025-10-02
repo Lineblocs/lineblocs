@@ -43,7 +43,7 @@ Lineblocs provides the core building blocks for modern telephony and real-time c
 
 - **Design and run programmable telephony** (SIP, WebRTC, RTP) with a visual Flow Editor.  
 - **Manage customers, tenants and billing** through user and admin portals.  
-- **Host voice features**: IVR, call recording, conferencing, bridging, number handling.  
+- **Host voice features** such as IVR, call recording, conferencing, bridging, and number handling.  
 - **Integrate voice into apps** using REST APIs and webhooks.  
 - **Process billing & CDR pipelines** and generate invoices or usage reports.  
 - **Operate at carrier scale** using SIP proxies and RTP proxy pools (architected for scale).  
@@ -78,18 +78,16 @@ docker-compose up --build
 
 Lineblocs supports multiple deployment models so organizations can choose what best fits their operational and compliance needs:
 
-* **Self-hosted (Full Web + VoIP)** — host the complete stack in your own cloud or private data center.  
-* **Web-only** — run the user/admin stack while leveraging hosted telephony services.  
-* **VoIP-only** — run telephony infra and use hosted portals or integrate with other admin systems.  
-* **Hybrid** — combine cloud-hosted components with self-hosted media or control-plane pieces to meet data residency, latency, or regulatory requirements.  
+* **Self-hosted (Full Web + VoIP)** — Host the complete stack in your own cloud or private data center.  
+* **Web-only** — Run the user or admin stack while leveraging hosted telephony services.  
+* **VoIP-only** — Run telephony infra and use hosted portals or integrate with other admin systems.  
+* **Hybrid** — Combine cloud-hosted components with self-hosted media or control-plane pieces to meet data residency, latency, or regulatory requirements.  
 
-For cloud deployment patterns, capacity planning, and recommended architecture for production, consult the official deployment resources:  
+For cloud deployment patterns, capacity planning, and recommended architecture for production, see the official deployment resources:  
 
 [https://lineblocs.com/resources](https://lineblocs.com/resources)
 
-> Note: This README focuses on **service design and architecture** rather than specific orchestration instructions. See the docs above for Helm/Kubernetes manifests and platform-specific deployment guides.
-
-
+> Note: This README focuses on **service design and architecture** rather than specific orchestration instructions. See the docs above for Helm or Kubernetes manifests and platform-specific deployment guides.
 
 ### Hosted Sandbox (No Setup Required)
 
@@ -99,7 +97,7 @@ If you want to evaluate Lineblocs without installing anything, check the officia
 
 ## Architectural Overview
 
-Below is a detailed service-level design for Lineblocs. This is intentionally **platform-focused**, describing components and how they interact at runtime.
+Below is a detailed service-level design for Lineblocs. This is **platform-focused**, describing components and how they interact at runtime.
 
 ![Lineblocs Architecture](docs/imgs/lineblocs_architecture.png)
 
@@ -118,7 +116,7 @@ Below is a detailed service-level design for Lineblocs. This is intentionally **
   * Compute routing (which trunk, which media cluster)  
   * Emit and record billing events (start/stop)  
   * Provide real-time feature flags and call flow decisions  
-- **Design goals**: minimal latency; high throughput; small response sizes; horizontal scaling.  
+- **Design goals**: Minimal latency; high throughput; small response sizes; horizontal scaling.  
 
 #### VoIP Layer
 - **OpenSIPS Proxy**: Accepts REGISTER and INVITE messages, performs account lookup, enforces routing policies, and forwards signaling to media servers. For each incoming call, it queries the Internals API for authorization and final routing decisions. It also orchestrates RTP Proxy assignment for optimal media paths.  
@@ -245,14 +243,11 @@ We welcome contributions from operators, developers, and system engineers.
 - For roadmap, integrations, or enterprise discussions, use the contact options on [https://lineblocs.com](https://lineblocs.com)  
 
 
-
 ## Feature Requests & Bugs
 
 - **Feature requests**: Open a “Feature Request” issue describing the use case, desired behaviour, and potential impact.  
 - **Bug reports**: Provide reproduction steps, environment details, and logs where possible.  
 - **Security issues**: Contact the Lineblocs team privately (see website for secure disclosure instructions).  
-
-
 
 ## Versioning
 
@@ -268,13 +263,9 @@ MAJOR.MINOR.PATCH
 
 Check the [CHANGELOG.md](./CHANGELOG.md) file for details.
 
-
-
 ## License
 
 Lineblocs is released under **AGPL-3.0**. See `LICENSE` for full terms.
-
-
 
 ## Team Behind Lineblocs
 
