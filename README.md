@@ -1,7 +1,7 @@
 # Lineblocs
 
 <p align="center">
-  <img src="https://lineblocs.com/assets/logo.png" alt="Lineblocs Logo" width="280"/>
+  <img src="https://lineblocs.com/assets/img/0PK66Riu6lEMOEZC4d5CF730ZTH1mK.png" alt="Lineblocs Logo" width="280"/>
 </p>
 
 <p align="center">
