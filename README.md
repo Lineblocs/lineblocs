@@ -195,20 +195,24 @@ flowchart TB
     VW["🔁 VoIP Workers / Billing Enrichers"]
   end
 
+  %% CDN feeds the web apps
   CDN --> UP
   CDN --> FE
 
+  %% Web apps call APIs
   UP -->|HTTPS| UAPI
   FE -->|HTTPS| UAPI
   AP -->|DB reads/writes| DB
 
+  %% APIs interact with infra
   UAPI -->|CRUD| DB
   IAPI -->|Real-time reads/writes| DB
   IAPI -->|Records/media| OBJ
   CACHE --> UAPI
   CACHE --> IAPI
 
-  OS -->|Auth & routing requests| IAPI
+  %% VoIP subsystem
+  OS -->|Auth & routing| IAPI
   OS -->|SIP| AM
   OS -->|controls| RTP
   AM -->|events (via ARI)| AB
