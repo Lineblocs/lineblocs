@@ -162,12 +162,6 @@ flowchart LR
 
 ---
 
-## Architectural Overview
-
-Below is a detailed service-level design for Lineblocs. This is intentionally **platform-focused**, describing components and how they interact at runtime.
-
-### High-level Service View
-
 ### High-level Service View
 
 ```mermaid
@@ -195,27 +189,27 @@ flowchart TB
     VW["🔁 VoIP Workers / Billing Enrichers"]
   end
 
-  %% CDN feeds the web apps
   CDN --> UP
   CDN --> FE
 
-  %% Web apps call APIs
   UP -->|HTTPS| UAPI
   FE -->|HTTPS| UAPI
   AP -->|DB reads/writes| DB
 
-  %% APIs interact with infra
   UAPI -->|CRUD| DB
   IAPI -->|Real-time reads/writes| DB
   IAPI -->|Records/media| OBJ
   CACHE --> UAPI
   CACHE --> IAPI
 
-  %% VoIP subsystem
   OS -->|Auth & routing| IAPI
   OS -->|SIP| AM
   OS -->|controls| RTP
   AM -->|events (via ARI)| AB
+  AB -->|billing triggers| IAPI
+  VW -->|async jobs| DB
+  VW -->|rate lookups| IAPI
+```
   AB -->|billing triggers| IAPI
   VW -->|async jobs| DB
   VW -->|rate lookups| IAPI
