@@ -48,7 +48,7 @@ Lineblocs provides the core building blocks for modern telephony and real-time c
 - **Process billing & CDR pipelines** and generate invoices or usage reports.  
 - **Operate at carrier scale** using SIP proxies and RTP proxy pools (architected for scale).  
 
----
+
 
 ## Quickstart (Local Setup)
 
@@ -72,7 +72,7 @@ docker-compose up --build
 
 > If you do not see these endpoints, consult the `docker-compose.yml` file in the repository for exact port mappings and the `README` in that repo for environment variables.
 
----
+
 
 ### Cloud Deployment
 
@@ -89,14 +89,14 @@ For cloud deployment patterns, capacity planning, and recommended architecture f
 
 > Note: This README focuses on **service design and architecture** rather than specific orchestration instructions. See the docs above for Helm/Kubernetes manifests and platform-specific deployment guides.
 
----
+
 
 ### Hosted Sandbox (No Setup Required)
 
 If you want to evaluate Lineblocs without installing anything, check the official resources page for sandbox or demo access (availability may vary):  
 👉 [https://lineblocs.com/resources](https://lineblocs.com/resources)
 
----
+
 
 ## Why Lineblocs?
 
@@ -137,7 +137,7 @@ You can build advanced voice features quickly using tools developers already und
 ### 6) Deployment Flexibility & Data Control
 Lineblocs supports self-hosted and hybrid models — useful when data residency, compliance, or latency requirements prohibit using hosted-only solutions. You retain full control over data, routing policies, and vendor selection for carriers/trunks.
 
----
+
 
 ### Old Telecom vs Lineblocs — Visual Comparison
 
@@ -170,7 +170,7 @@ flowchart LR
   click B1 "https://lineblocs.com/resources"
 ```
 
----
+
 
 ## Architectural Overview
 
@@ -230,7 +230,7 @@ sequenceDiagram
   IA->>DB: Insert CDR (call start)
 ```
 
----
+
 
 ## Our Vision
 
@@ -239,7 +239,7 @@ We believe telecommunications should be **open, programmable, and accessible**. 
 - Make carrier-grade telephony available to product teams and developers.  
 - Provide a secure, extensible, and production-ready platform that integrates with modern cloud-native tooling.  
 
----
+
 
 ## Community & Contributions
 
@@ -249,7 +249,7 @@ We welcome contributions from operators, developers, and system engineers.
 - Report issues: [https://github.com/lineblocs/lineblocs/issues](https://github.com/lineblocs/lineblocs/issues)  
 - For roadmap, integrations, or enterprise discussions, use the contact options on [https://lineblocs.com](https://lineblocs.com)  
 
----
+
 
 ## Feature Requests & Bugs
 
@@ -257,7 +257,7 @@ We welcome contributions from operators, developers, and system engineers.
 - **Bug reports**: Provide reproduction steps, environment details, and logs where possible.  
 - **Security issues**: Contact the Lineblocs team privately (see website for secure disclosure instructions).  
 
----
+
 
 ## Versioning
 
@@ -273,13 +273,13 @@ MAJOR.MINOR.PATCH
 
 Check the [CHANGELOG.md](./CHANGELOG.md) file for details.
 
----
+
 
 ## License
 
 Lineblocs is released under **AGPL-3.0**. See `LICENSE` for full terms.
 
----
+
 
 ## Team Behind Lineblocs
 
