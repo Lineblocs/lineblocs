@@ -143,31 +143,31 @@ Lineblocs supports self-hosted and hybrid models — useful when data residency,
 
 ```mermaid
 flowchart LR
- subgraph Legacy
-        A["PBX / Proprietary"]
-        V["Vendor Customization"]
-        COST["High OpEx & License Cost"]
+  subgraph Legacy
+    A["PBX / Proprietary"]
+    V["Vendor Customization"]
+    COST["High OpEx & License Cost"]
   end
- subgraph Lineblocs
-        B1["Open-source Stack"]
-        B2["Visual Call Flows"]
-        B3["Developer APIs"]
-        B4["Hybrid Deployment"]
+  subgraph Lineblocs
+    B1["Open-source Stack"]
+    B2["Visual Call Flows"]
+    B3["Developer APIs"]
+    B4["Hybrid Deployment"]
   end
-    A -- drawback: slow, costly --> B1
-    V -- drawback: locked --> B2
-    COST -- drawback: expensive --> B3
-    B["B"]
+  A -- "Open & Interoperable" --> B1
+  V -- "No Vendor Lock-in" --> B2
+  COST -- "Lower Cost, No License Fees" --> B3
+  B2 -- "Rapid Service Creation" --> B4
+  B3 -- "Programmable & Extensible" --> B1
 
-    style A fill:#FFCDD2,stroke:#f59e0b,stroke-width:2px
-    style V fill:#FFCDD2
-    style COST fill:#FFCDD2
-    style B1 fill:#BBDEFB
-    style B2 fill:#FFF9C4
-    style B3 stroke:#C8E6C9,fill:#C8E6C9
-    style B4 fill:#E1BEE7
-    style B fill:#dbeafe,stroke:#2563eb,stroke-width:2px
-    click B1 "https://lineblocs.com/resources"
+  style A fill:#FFCDD2,stroke:#f59e0b,stroke-width:2px
+  style V fill:#FFCDD2
+  style COST fill:#FFCDD2
+  style B1 fill:#BBDEFB
+  style B2 fill:#FFF9C4
+  style B3 stroke:#C8E6C9,fill:#C8E6C9
+  style B4 fill:#E1BEE7
+  click B1 "https://lineblocs.com/resources"
 ```
 
 ---
