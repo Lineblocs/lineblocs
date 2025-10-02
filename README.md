@@ -222,51 +222,52 @@ flowchart TB
 - **Laravel Admin Panel**: Admin UI for managing tenants, carriers, SIP trunk credentials, billing rules, system health, and analytics. It typically reads/writes data directly to the shared datastore (subject to role-based access control).  
 - **User API**: Public-facing HTTP API that performs validation, auth (API keys / tokens), CRUD, and orchestrates non-real-time operations.  
 
-#### Internals API
-- **Purpose**: Private API (machine-to-machine) used by SIP and media components for **low-latency** lookups and writes.  
-- **Responsibilities**:  
-  * Validate call permissions and user/tenant balance  
-  * Compute routing (which trunk, which media cluster)  
-  * Emit and record billing events (start/stop)  
-  * Provide real-time feature flags and call flow decisions  
-- **Design goals**: minimal latency; high throughput; small response sizes; horizontal scaling.  
-
-#### VoIP Layer
-- **OpenSIPS Proxy**: Accepts REGISTER and INVITE messages, performs account lookup, enforces routing policies, and forwards signaling to media servers. For each incoming call, it queries the Internals API for authorization and final routing decisions. It also orchestrates RTP Proxy assignment for optimal media paths.  
-- **Asterisk Backend (ARI client)**: An application-layer service that listens to Asterisk events via ARI. On call events (answered, bridge, DTMF), it executes business logic — often by calling Internals API endpoints to start/stop billing timers or update CDRs.  
-- **Asterisk Media Server**: Acts as a B2BUA for scenarios that need media manipulation (IVR prompts, bridging, recording). Receives SIP from OpenSIPS and is controlled via ARI by the Asterisk Backend.  
-- **RTP Proxy Pool**: Stateless or semi-stateless media relays that handle RTP forwarding to avoid NAT/media issues and to distribute load.  
-- **VoIP Workers / Billing Enrichers**: Background workers that process raw CDRs, perform rate lookups, apply discounts/promotions, and generate invoices or settlements.  
-
-### Runtime Call Flow (Simplified)
-
 ```mermaid
-sequenceDiagram
-  participant U as SIP Endpoint
-  participant OS as OpenSIPS
-  participant IA as Internals API
-  participant AM as Asterisk Media Server
-  participant AB as Asterisk Backend
-  participant DB as Shared Database
+flowchart TB
+  subgraph Web["🌐 Web Helm Chart (User/API layer)"]
+    UP["👤 User Portal (SPA)"]
+    FE["🛠 Flow Editor (SPA)"]
+    AP["📊 Laravel Admin Panel"]
+    UAPI["🛰 User API (public)"]
+    IAPI["⚡ Internals API (private)"]
+  end
 
-  U->>OS: REGISTER
-  OS->>IA: Authenticate registration
-  IA->>DB: Verify account status
-  DB-->>IA: OK
-  IA-->>OS: Auth OK
+  subgraph Infra["Shared Infrastructure"]
+    DB["🗄 Shared Database (single source of truth)"]
+    OBJ["📦 Object Storage (recordings, media)"]
+    CDN["🌍 CDN (static assets)"]
+    CACHE["⚡ Cache / Session Store"]
+  end
 
-  U->>OS: INVITE (call)
-  OS->>IA: Authorize call, request routing
-  IA->>DB: Check balance, routing rules
-  DB-->>IA: Route found
-  IA-->>OS: Approved with route to AM
-  OS->>AM: Forward INVITE
-  AM->>AB: ARI event: answered
-  AB->>IA: Start billing timer
-  IA->>DB: Insert CDR (call start)
+  subgraph VoIP["📞 VoIP Helm Chart (Realtime layer)"]
+    OS["📡 OpenSIPS Proxy (SIP front door)"]
+    AB["🔗 Asterisk Backend (ARI client)"]
+    AM["🎙 Asterisk Media Server (B2BUA)"]
+    RTP["🎛 RTP Proxy Pool"]
+    VW["🔁 VoIP Workers / Billing Enrichers"]
+  end
+
+  CDN --> UP
+  CDN --> FE
+
+  UP -->|HTTPS| UAPI
+  FE -->|HTTPS| UAPI
+  AP -->|DB reads/writes| DB
+
+  UAPI -->|CRUD| DB
+  IAPI -->|Real-time reads/writes| DB
+  IAPI -->|Records/media| OBJ
+  CACHE --> UAPI
+  CACHE --> IAPI
+
+  OS -->|Auth & routing| IAPI
+  OS -->|SIP| AM
+  OS -->|controls| RTP
+  AM -->|events (via ARI)| AB
+  AB -->|billing triggers| IAPI
+  VW -->|async jobs| DB
+  VW -->|rate lookups| IAPI
 ```
-
----
 
 ## Our Vision
 
