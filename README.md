@@ -168,6 +168,8 @@ Below is a detailed service-level design for Lineblocs. This is intentionally **
 
 ### High-level Service View
 
+### High-level Service View
+
 ```mermaid
 flowchart TB
   subgraph Web["🌐 Web Helm Chart (User/API layer)"]
@@ -213,7 +215,6 @@ flowchart TB
   AB -->|billing triggers| IAPI
   VW -->|async jobs| DB
   VW -->|rate lookups| IAPI
-```
 
 ### Component Details (Service Design)
 
