@@ -99,6 +99,10 @@ If you want to evaluate Lineblocs without installing anything, check the officia
 
 Below is a detailed service-level design for Lineblocs. This is **platform-focused**, describing components and how they interact at runtime.
 
+![Lineblocs Architecture](docs/imgs/lineblocs_features.png)
+
+![Lineblocs Architecture](docs/imgs/lineblocs_nonfunctional_features.png)
+
 ![Lineblocs Architecture](docs/imgs/lineblocs_architecture.png)
 
 ### Component Details (Service Design)
