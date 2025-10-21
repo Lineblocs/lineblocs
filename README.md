@@ -39,7 +39,7 @@
 
 ## What Can I Do with Lineblocs?
 
-Lineblocs provides the core building blocks for modern telephony and real-time communications:
+Lineblocs is a framework for building scalable VoIP solutions on-premises:
 
 - **Design and run programmable telephony** (SIP, WebRTC, RTP) with a visual Flow Editor.  
 - **Manage customers, tenants and billing** through user and admin portals.  
