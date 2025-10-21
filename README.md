@@ -10,7 +10,7 @@
 
 <p align="center">
   <a href="https://lineblocs.com/resources">Documentation</a> •
-  <a href="https://lineblocs.com">Website</a> •
+  <a href="https://lineblocs.io">Website</a> •
   <a href="https://github.com/lineblocs">GitHub</a>
 </p>
 
