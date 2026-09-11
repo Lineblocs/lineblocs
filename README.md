@@ -41,7 +41,7 @@
 
 Lineblocs is a framework for building scalable VoIP solutions on-premises:
 
-- **Design and run programmable telephony** (SIP, WebRTC, RTP) with a visual Flow Editor.  
+- **Design and run programmable communications apps** (SIP, WebRTC, RTP) with a visual Flow Editor.  
 - **Manage customers, tenants and billing** through user and admin portals.  
 - **Host voice features** such as IVR, call recording, conferencing, bridging, and number handling.  
 - **Integrate voice into apps** using REST APIs and webhooks.  
