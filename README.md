@@ -46,7 +46,7 @@ Lineblocs is a framework for building scalable VoIP solutions on-premises:
 - **Host voice features** such as IVR, call recording, conferencing, bridging, and number handling.  
 - **Integrate voice into apps** using REST APIs and webhooks.  
 - **Process billing & CDR pipelines** and generate invoices or usage reports.  
-- **Operate at carrier scale** using SIP proxies and RTP proxy pools (architected for scale).  
+- **Operate at carrier scale** using SIP proxies and RTP engine pools (architected for scale).  
 
 
 
@@ -127,7 +127,7 @@ Below is a detailed service-level design for Lineblocs. This is **platform-focus
 - **OpenSIPS Proxy**: Accepts REGISTER and INVITE messages, performs account lookup, enforces routing policies, and forwards signaling to media servers. For each incoming call, it queries the Internals API for authorization and final routing decisions. It also orchestrates RTP Proxy assignment for optimal media paths.  
 - **Asterisk Backend (ARI client)**: An application-layer service that listens to Asterisk events via ARI. On call events (answered, bridge, DTMF), it executes business logic — often by calling Internals API endpoints to start/stop billing timers or update CDRs.  
 - **Asterisk Media Server**: Acts as a B2BUA for scenarios that need media manipulation (IVR prompts, bridging, recording). Receives SIP from OpenSIPS and is controlled via ARI by the Asterisk Backend.  
-- **RTP Proxy Pool**: Stateless or semi-stateless media relays that handle RTP forwarding to avoid NAT/media issues and to distribute load.  
+- **RTP Engine Pool**: Stateless or semi-stateless media relays that handle RTP forwarding to avoid NAT/media issues and to distribute load.  
 - **VoIP Workers / Billing Enrichers**: Background workers that process raw CDRs, perform rate lookups, apply discounts/promotions, and generate invoices or settlements.  
 
 ### Runtime Call Flow (Simplified)
@@ -275,3 +275,6 @@ Lineblocs is released under **AGPL-3.0**. See `LICENSE` for full terms.
 ## Team Behind Lineblocs
 
 Lineblocs is developed and maintained by the Lineblocs engineering team with contributions from the community. For partnership or enterprise enquiries, visit [https://lineblocs.com](https://lineblocs.com).
+
+
+replacee rtp proxy with rtp engine
