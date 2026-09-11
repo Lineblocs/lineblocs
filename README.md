@@ -124,7 +124,7 @@ Below is a detailed service-level design for Lineblocs. This is **platform-focus
 - **Design goals**: Minimal latency; high throughput; small response sizes; horizontal scaling.  
 
 #### VoIP Layer
-- **OpenSIPS Proxy**: Accepts REGISTER and INVITE messages, performs account lookup, enforces routing policies, and forwards signaling to media servers. For each incoming call, it queries the Internals API for authorization and final routing decisions. It also orchestrates RTP Proxy assignment for optimal media paths.  
+- **OpenSIPS Proxy**: Accepts REGISTER and INVITE messages, performs account lookup, enforces routing policies, and forwards signaling to media servers. For each incoming call, it queries the Internals API for authorization and final routing decisions. It also orchestrates RTP Engine assignment for optimal media paths.  
 - **Asterisk Backend (ARI client)**: An application-layer service that listens to Asterisk events via ARI. On call events (answered, bridge, DTMF), it executes business logic — often by calling Internals API endpoints to start/stop billing timers or update CDRs.  
 - **Asterisk Media Server**: Acts as a B2BUA for scenarios that need media manipulation (IVR prompts, bridging, recording). Receives SIP from OpenSIPS and is controlled via ARI by the Asterisk Backend.  
 - **RTP Engine Pool**: Stateless or semi-stateless media relays that handle RTP forwarding to avoid NAT/media issues and to distribute load.  
@@ -181,7 +181,7 @@ A core differentiator is the **Internals API** — a low-latency, high-throughpu
 ### 4) Architected for Scale
 Lineblocs applies proven telecom patterns:
 - SIP proxies (OpenSIPS) for registration and routing at scale  
-- RTP proxy pools to offload media relay and reduce media server load  
+- RTP engine pools to offload media relay and reduce media server load  
 - Media engines (Asterisk) for B2BUA tasks like IVR, conferencing, and recording  
 
 These enable predictable scaling from pilot to carrier-grade deployments.
